@@ -8,11 +8,16 @@ import '../styles/Dummy.scss';
 import '../styles/Letters.scss';
 import '../styles/Form.scss';
 import '../styles/Header.scss';
+// components
+import Header from './Header';
+import Dummy from './Dummy';
+import SolutionLetters from './SolutionLetters';
 
 function App() {
   const [word, setWord] = useState('');
   const [userLetters, setUserLetters] = useState([]);
   const [lastLetter, setLastLetter] = useState('');
+  const [numberOfErrors, setNumberOfErrors] = useState(0);
 
   useEffect(() => {
     getWordFromApi().then((word) => {
@@ -42,19 +47,7 @@ function App() {
     const errorLetters = userLetters.filter(
       (letter) => word.includes(letter) === false
     );
-    return errorLetters.length;
-  };
-
-  const renderSolutionLetters = () => {
-    const wordLetters = word.split('');
-    return wordLetters.map((letter, index) => {
-      const exists = userLetters.includes(letter.toLocaleLowerCase());
-      return (
-        <li key={index} className='letter'>
-          {exists ? letter : ''}
-        </li>
-      );
-    });
+    return setNumberOfErrors(errorLetters.length);
   };
 
   const renderErrorLetters = () => {
@@ -79,19 +72,15 @@ function App() {
       userLetters.push(value);
       setUserLetters([...userLetters]);
     }
+    getNumberOfErrors();
   };
 
   return (
     <div className='page'>
-      <header>
-        <h1 className='header__title'>Juego del ahorcado</h1>
-      </header>
+      <Header />
       <main className='main'>
         <section>
-          <div className='solution'>
-            <h2 className='title'>Solución:</h2>
-            <ul className='letters'>{renderSolutionLetters()}</ul>
-          </div>
+        <SolutionLetters word={word} userLetters={userLetters}/>
           <div className='error'>
             <h2 className='title'>Letras falladas:</h2>
             <ul className='letters'>{renderErrorLetters()}</ul>
@@ -114,21 +103,7 @@ function App() {
             />
           </form>
         </section>
-        <section className={`dummy error-${getNumberOfErrors()}`}>
-          <span className='error-13 eye'></span>
-          <span className='error-12 eye'></span>
-          <span className='error-11 line'></span>
-          <span className='error-10 line'></span>
-          <span className='error-9  line'></span>
-          <span className='error-8  line'></span>
-          <span className='error-7  line'></span>
-          <span className='error-6  head'></span>
-          <span className='error-5  line'></span>
-          <span className='error-4  line'></span>
-          <span className='error-3  line'></span>
-          <span className='error-2  line'></span>
-          <span className='error-1  line'></span>
-        </section>
+        <Dummy numberOfErrors={numberOfErrors}/>
       </main>
     </div>
   );
