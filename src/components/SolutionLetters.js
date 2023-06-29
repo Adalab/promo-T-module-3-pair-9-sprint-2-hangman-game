@@ -1,4 +1,5 @@
 import '../styles/Letters.scss';
+import PropTypes from 'prop-types';
 
 const SolutionLetters = ( {word, userLetters} ) => {
     const renderSolutionLetters = () => {

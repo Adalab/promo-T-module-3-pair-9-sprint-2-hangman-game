@@ -1,6 +1,5 @@
+import PropTypes from 'prop-types';
 const Dummy = (props) => {
-    
-
     
     return (<section className={`dummy error-${props.numberOfErrors}`}>
     <span className='error-13 eye'></span>
